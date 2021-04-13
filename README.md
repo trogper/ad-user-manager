@@ -27,3 +27,5 @@ app configuration xml:
   - example: `OU=Managed,OU=Groups,DC=example,DC=com`
 - domain_name: domain part (suffix) of userPrincipalName for new users
 
+# Attribution
+Icon made by [Freepik](https://www.freepik.com)
