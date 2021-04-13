@@ -1,0 +1,24 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AdUserManager.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="dc_name" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="username" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="password" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="users_dn" Type="System.String" Scope="User">
+      <Value Profile="(Default)">OU=Managed,OU=AD Users,DC=example,DC=com</Value>
+    </Setting>
+    <Setting Name="groups_dn" Type="System.String" Scope="User">
+      <Value Profile="(Default)">OU=Managed,OU=Groups,DC=example,DC=com</Value>
+    </Setting>
+    <Setting Name="domain_name" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>
