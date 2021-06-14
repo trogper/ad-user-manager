@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AdUserManager
@@ -68,7 +71,7 @@ namespace AdUserManager
             return input[0].ToString().ToUpper() + input.Substring(1);
         }
 
-        private string CapitalizeTextBox(TextBox textBox)
+        private string EditTextBox(TextBox textBox, Func<string, string> func)
         {
             var text = textBox.Text;
 
@@ -79,7 +82,7 @@ namespace AdUserManager
             {
                 var selpos = textBox.SelectionStart;
                 var sellen = textBox.SelectionLength;
-                text = textBox.Text = CapitalizeFirst(text);
+                text = textBox.Text = func(text);
                 textBox.SelectionStart = selpos;
                 textBox.SelectionLength = sellen;
             }
@@ -90,8 +93,8 @@ namespace AdUserManager
         private void nameTextBox_TextChanged(object sender, EventArgs e)
         {
             
-            var fname = CapitalizeTextBox(firstNameTextBox);
-            var lname = CapitalizeTextBox(lastNameTextBox);
+            var fname = EditTextBox(firstNameTextBox, CapitalizeFirst);
+            var lname = EditTextBox(lastNameTextBox, CapitalizeFirst);
 
             var fLetter = (fname == "") ? "" : fname.Substring(0, 1);
 
@@ -99,6 +102,11 @@ namespace AdUserManager
 
             if (isNewUser)
                 logonNameTextBox.Text = Unaccent(fLetter + lname);
+        }
+
+        private void logonNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+            EditTextBox(logonNameTextBox, (string str) => RemoveSpecialChars(Unaccent(str)));
         }
 
         private void groupListBox_Click(object sender, EventArgs e)
@@ -112,10 +120,25 @@ namespace AdUserManager
 
         private string Unaccent(string input)
         {
-            byte[] tempBytes = System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(input);
-            string asciiStr = System.Text.Encoding.UTF8.GetString(tempBytes);
+            var normalizedString = input.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
 
-            return asciiStr;
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        private string RemoveSpecialChars(string input)
+        {
+            string regExp = "[^A-Za-z]";
+            return Regex.Replace(input, regExp, "");
         }
 
         private (UserPrincipal, List<GroupPrincipal>) ModifyUser()
@@ -192,17 +215,13 @@ namespace AdUserManager
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Error saving user\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logging.logWarning($"Error saving user\n${ex.Message}");
                 return;
             }
             
             
             DialogResult = DialogResult.OK;
             Close();
-        }
-
-        private void logonNameTextBox_TextChanged(object sender, EventArgs e)
-        {
-            logonNameTextBox.Text = Unaccent(logonNameTextBox.Text);
         }
     }
 }

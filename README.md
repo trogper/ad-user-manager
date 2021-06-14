@@ -17,7 +17,6 @@ Supports following operations:
 3. Delegate "manage membership" on Groups OU to a desired manager user.
 
 app configuration xml:
-
 - dc_name: IP address or hostname of domain controller. If left empty, it will be discovered automatically.
 - username: Authentication username. If left empty, current logged in user will be used
 - password: Authentication password. Only used if username is provided.
@@ -25,7 +24,9 @@ app configuration xml:
   - example: `OU=Managed,OU=AD Users,DC=example,DC=com`
 - groups_dn: DN of Groups OU
   - example: `OU=Managed,OU=Groups,DC=example,DC=com`
-- domain_name: domain part (suffix) of userPrincipalName for new users
+- managers_group_dn: DN of Managers Group
+ - example: `CN=UserAccountManagers,OU=Groups,DC=example,DC=com`
+- logging_enabled: logging to local EventLog
 
 # Attribution
 Icon made by [Freepik](https://www.freepik.com)

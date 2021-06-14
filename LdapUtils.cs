@@ -12,6 +12,10 @@ namespace AdUserManager
     {
 
         static public string DomainName;
+        static public string currentUser;
+        static public bool WritePermitted;
+
+        static string ManagersGroupDN;
 
         static PrincipalContext usersContext, groupsContext;
 
@@ -22,7 +26,9 @@ namespace AdUserManager
             string dcName = Properties.Settings.Default.dc_name;
             string username = Properties.Settings.Default.username;
             string password = Properties.Settings.Default.password;
+
             DomainName = Properties.Settings.Default.domain_name;
+            ManagersGroupDN = Properties.Settings.Default.managers_group_dn;
 
             if (string.IsNullOrEmpty(ManagedUsersDN) || string.IsNullOrEmpty(ManagedGroupsDN))
             {
@@ -31,7 +37,7 @@ namespace AdUserManager
 
             if (string.IsNullOrEmpty(DomainName))
             {
-                DomainName = ExtractDomai1nName(ManagedUsersDN);
+                DomainName = ExtractDomainName(ManagedUsersDN);
                 if (string.IsNullOrEmpty(DomainName))
                     throw new ApplicationException("Setting domain_name not provided and could not extract it from user_dn");
             }
@@ -59,11 +65,14 @@ namespace AdUserManager
             {
                 new PrincipalSearcher(new UserPrincipal(usersContext) { Name = "*" }).FindOne();
             }
+            // catch Principal not found
             catch (PrincipalOperationException poex) { }
 
+            WritePermitted = IsReadWrite();
+            currentUser = UserPrincipal.Current.SamAccountName;
         }
 
-        private static string ExtractDomai1nName(string DN)
+        private static string ExtractDomainName(string DN)
         {
             var dcs = new List<string>();
 
@@ -75,6 +84,20 @@ namespace AdUserManager
             }
 
             return string.Join(".", dcs);
+        }
+
+        private static bool IsReadWrite()
+        {
+            if (string.IsNullOrWhiteSpace(ManagersGroupDN))
+                return true;
+
+            var currentUser = UserPrincipal.Current;
+            var isManager = currentUser
+                .GetGroups()
+                .Select(g => g.DistinguishedName)
+                .Contains(ManagersGroupDN);
+
+            return isManager;
         }
 
         static public UserPrincipal NewUser()
