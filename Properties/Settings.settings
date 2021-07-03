@@ -26,5 +26,14 @@
     <Setting Name="logging_enabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="expiration_enabled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="expiration_date" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">2020-01-01</Value>
+    </Setting>
+    <Setting Name="expiration_extend_period" Type="System.String" Scope="User">
+      <Value Profile="(Default)">year</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

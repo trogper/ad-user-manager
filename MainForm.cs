@@ -25,8 +25,13 @@ namespace AdUserManager
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            Utils.validateProperties();
+
             LdapUtils.init();
             Logging.init();
+
+            userEditForm.StartPosition = FormStartPosition.CenterParent;
+            newPasswordForm.StartPosition = FormStartPosition.CenterParent;
 
             if (!LdapUtils.WritePermitted)
             {
@@ -65,13 +70,25 @@ namespace AdUserManager
 
                 managedUsersGroups.Add(groups.ToList());
 
+                bool expires = user.AccountExpirationDate.HasValue;
+                DateTime? expiration = user.AccountExpirationDate?.Date.AddDays(-1);
+                bool expired = expires && expiration.Value.CompareTo(DateTime.Now) < 0;
+
+                string expiresStr = expires
+                    ? expiration.Value.ToShortDateString()
+                    : "never";
+
                 var i = userGridView.Rows.Add(new object[] {
                     user.SamAccountName,
                     user.DisplayName,
                     string.Join(",", groups.Select(p => p.Name)),
                     user.Enabled,
-                    user.IsAccountLockedOut()
+                    user.IsAccountLockedOut(),
+                    expiresStr
                 });
+
+                if (expired)
+                    userGridView.Rows[i].Cells[5].Style.BackColor = System.Drawing.Color.LightSalmon;
 
                 if (LdapUtils.WritePermitted)
                     userGridView.Rows[i].ContextMenuStrip = rowContextMenuStrip;
@@ -138,6 +155,23 @@ namespace AdUserManager
             }
         }
 
+        private void ExtendExpiration(UserPrincipal user)
+        {
+            try
+            {
+                user.AccountExpirationDate = Utils.getNextExpirationDate(user.AccountExpirationDate.Value);
+                user.Save();
+                LoadUsers();
+
+                Logging.logInfo($"Account ${user.SamAccountName} expiration extended");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, "Account expiration could not be extended\n" + ex.Message, "Expiration extension failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Logging.logError($"Account ${user.SamAccountName} expiration could not be extended\n${ex.Message}");
+            }
+        }
+
         private void NewPassword(UserPrincipal user)
         {
             newPasswordForm.LoadUser(user);
@@ -177,7 +211,9 @@ namespace AdUserManager
             var user = GetSelectedUser();
             var enabled = user.Enabled == true;
             var lockedOut = user.IsAccountLockedOut();
+            var expires = user.AccountExpirationDate.HasValue;
 
+            extendExpirationToolStripMenuItem.Enabled = expires;
             enableDisableToolStripMenuItem.Text = enabled ? "Disable" : "Enable";
             unlockAccountToolStripMenuItem.Enabled = lockedOut;
         }
@@ -218,6 +254,11 @@ namespace AdUserManager
         private void unlockAccountToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UnlockUser(GetSelectedUser());
+        }
+
+        private void extendExpirationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendExpiration(GetSelectedUser());
         }
 
         private void newPasswordToolStripMenuItem_Click(object sender, EventArgs e)

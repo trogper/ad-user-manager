@@ -51,6 +51,20 @@ namespace AdUserManager
             emailTextBox.Text = user.EmailAddress;
             enabledCheckBox.Checked = user.Enabled == true || user.Enabled == null;
 
+            bool expires = user.AccountExpirationDate.HasValue;
+            var expiresRadio = expires ? expiresEndOfRadioButton : expiresNeverRadioButton;
+            expiresRadio.Checked = true;
+
+            DateTime expirationDate;
+            bool isNewAndExpires = isNewUser && Properties.Settings.Default.expiration_enabled;
+
+            if (expires || isNewAndExpires)
+                expirationDate = user.AccountExpirationDate.Value.AddDays(-1);
+            else
+                expirationDate = Utils.getNextExpirationDate();
+            
+            expirationDateTimePicker.Value = expirationDate;
+
             logonNameTextBox.ReadOnly = !isNewUser;
 
             for (var i = 0; i < managedGroups.Count; i++)
@@ -58,7 +72,6 @@ namespace AdUserManager
                 var check = userGroups.Contains(managedGroups[i]);
                 while (groupListBox.GetItemChecked(i) != check)
                     groupListBox.SetItemChecked(i, check);
-
             }
 
         }
@@ -172,6 +185,11 @@ namespace AdUserManager
 
             user.EmailAddress = emailTextBox.Text;
             user.Enabled = enabledCheckBox.Checked;
+
+            if (expiresEndOfRadioButton.Checked)
+                user.AccountExpirationDate = expirationDateTimePicker.Value.AddDays(1);
+            else
+                user.AccountExpirationDate = null;
 
             if (string.IsNullOrWhiteSpace(user.EmailAddress))
                 user.EmailAddress = null;

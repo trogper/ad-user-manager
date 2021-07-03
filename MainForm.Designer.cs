@@ -33,6 +33,7 @@
             this.userGridView = new System.Windows.Forms.DataGridView();
             this.dgContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newUserToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rowContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -42,12 +43,13 @@
             this.newPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newUserButton = new System.Windows.Forms.Button();
-            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LogonName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Username = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Groups = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.LockedOut = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Expires = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.extendExpirationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.userGridView)).BeginInit();
             this.dgContextMenuStrip.SuspendLayout();
             this.rowContextMenuStrip.SuspendLayout();
@@ -64,7 +66,8 @@
             this.Username,
             this.Groups,
             this.Enabled,
-            this.LockedOut});
+            this.LockedOut,
+            this.Expires});
             this.userGridView.ContextMenuStrip = this.dgContextMenuStrip;
             this.userGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userGridView.Location = new System.Drawing.Point(0, 0);
@@ -75,7 +78,7 @@
             this.userGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.userGridView.ShowCellToolTips = false;
             this.userGridView.ShowEditingIcon = false;
-            this.userGridView.Size = new System.Drawing.Size(800, 450);
+            this.userGridView.Size = new System.Drawing.Size(846, 450);
             this.userGridView.TabIndex = 0;
             // 
             // dgContextMenuStrip
@@ -93,6 +96,13 @@
             this.newUserToolStripMenuItem1.Text = "New User...";
             this.newUserToolStripMenuItem1.Click += new System.EventHandler(this.newUser_Click);
             // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
             // rowContextMenuStrip
             // 
             this.rowContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -101,10 +111,11 @@
             this.editUserToolStripMenuItem,
             this.enableDisableToolStripMenuItem,
             this.unlockAccountToolStripMenuItem,
+            this.extendExpirationToolStripMenuItem,
             this.newPasswordToolStripMenuItem,
             this.deleteUserToolStripMenuItem});
             this.rowContextMenuStrip.Name = "contextMenuStrip";
-            this.rowContextMenuStrip.Size = new System.Drawing.Size(161, 142);
+            this.rowContextMenuStrip.Size = new System.Drawing.Size(181, 186);
             this.rowContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // newUserToolStripMenuItem
@@ -157,20 +168,13 @@
             // newUserButton
             // 
             this.newUserButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.newUserButton.Location = new System.Drawing.Point(713, 415);
+            this.newUserButton.Location = new System.Drawing.Point(759, 415);
             this.newUserButton.Name = "newUserButton";
             this.newUserButton.Size = new System.Drawing.Size(75, 23);
             this.newUserButton.TabIndex = 1;
             this.newUserButton.Text = "New user";
             this.newUserButton.UseVisualStyleBackColor = true;
             this.newUserButton.Click += new System.EventHandler(this.newUser_Click);
-            // 
-            // refreshToolStripMenuItem
-            // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
-            this.refreshToolStripMenuItem.Text = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
             // LogonName
             // 
@@ -211,11 +215,25 @@
             this.LockedOut.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.LockedOut.Width = 70;
             // 
+            // Expires
+            // 
+            this.Expires.HeaderText = "Expires";
+            this.Expires.MinimumWidth = 100;
+            this.Expires.Name = "Expires";
+            this.Expires.ReadOnly = true;
+            // 
+            // extendExpirationToolStripMenuItem
+            // 
+            this.extendExpirationToolStripMenuItem.Name = "extendExpirationToolStripMenuItem";
+            this.extendExpirationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.extendExpirationToolStripMenuItem.Text = "Extend expiration";
+            this.extendExpirationToolStripMenuItem.Click += new System.EventHandler(this.extendExpirationToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(846, 450);
             this.Controls.Add(this.newUserButton);
             this.Controls.Add(this.userGridView);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -249,6 +267,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Groups;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Enabled;
         private System.Windows.Forms.DataGridViewCheckBoxColumn LockedOut;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Expires;
+        private System.Windows.Forms.ToolStripMenuItem extendExpirationToolStripMenuItem;
     }
 }
 

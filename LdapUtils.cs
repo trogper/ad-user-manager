@@ -30,17 +30,8 @@ namespace AdUserManager
             DomainName = Properties.Settings.Default.domain_name;
             ManagersGroupDN = Properties.Settings.Default.managers_group_dn;
 
-            if (string.IsNullOrEmpty(ManagedUsersDN) || string.IsNullOrEmpty(ManagedGroupsDN))
-            {
-                throw new ApplicationException("Settings user_dn and group_dn must not be empty");
-            }
-
             if (string.IsNullOrEmpty(DomainName))
-            {
                 DomainName = ExtractDomainName(ManagedUsersDN);
-                if (string.IsNullOrEmpty(DomainName))
-                    throw new ApplicationException("Setting domain_name not provided and could not extract it from user_dn");
-            }
 
             if (string.IsNullOrEmpty(dcName))
             {
@@ -72,7 +63,7 @@ namespace AdUserManager
             currentUser = UserPrincipal.Current.SamAccountName;
         }
 
-        private static string ExtractDomainName(string DN)
+        public static string ExtractDomainName(string DN)
         {
             var dcs = new List<string>();
 

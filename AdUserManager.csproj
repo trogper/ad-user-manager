@@ -89,6 +89,7 @@
     <Compile Include="UserEditForm.Designer.cs">
       <DependentUpon>UserEditForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

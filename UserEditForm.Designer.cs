@@ -43,12 +43,17 @@
             this.label6 = new System.Windows.Forms.Label();
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.expirationDateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.expiresNeverRadioButton = new System.Windows.Forms.RadioButton();
+            this.expiresEndOfRadioButton = new System.Windows.Forms.RadioButton();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupListBox
             // 
             this.groupListBox.CheckOnClick = true;
-            this.groupListBox.Location = new System.Drawing.Point(12, 181);
+            this.groupListBox.Location = new System.Drawing.Point(12, 250);
             this.groupListBox.Name = "groupListBox";
             this.groupListBox.Size = new System.Drawing.Size(247, 169);
             this.groupListBox.TabIndex = 5;
@@ -112,9 +117,9 @@
             this.enabledCheckBox.AutoSize = true;
             this.enabledCheckBox.Location = new System.Drawing.Point(108, 142);
             this.enabledCheckBox.Name = "enabledCheckBox";
-            this.enabledCheckBox.Size = new System.Drawing.Size(65, 17);
+            this.enabledCheckBox.Size = new System.Drawing.Size(107, 17);
             this.enabledCheckBox.TabIndex = 4;
-            this.enabledCheckBox.Text = "Enabled";
+            this.enabledCheckBox.Text = "Account enabled";
             this.enabledCheckBox.UseVisualStyleBackColor = true;
             // 
             // lastNameTextBox
@@ -154,7 +159,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 165);
+            this.label6.Location = new System.Drawing.Point(12, 234);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 13);
             this.label6.TabIndex = 2;
@@ -162,7 +167,7 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(103, 356);
+            this.saveButton.Location = new System.Drawing.Point(103, 425);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 7;
@@ -172,7 +177,8 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(184, 356);
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(184, 425);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 6;
@@ -180,12 +186,57 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // expirationDateTimePicker
+            // 
+            this.expirationDateTimePicker.Location = new System.Drawing.Point(71, 40);
+            this.expirationDateTimePicker.MinDate = new System.DateTime(2020, 1, 1, 0, 0, 0, 0);
+            this.expirationDateTimePicker.Name = "expirationDateTimePicker";
+            this.expirationDateTimePicker.Size = new System.Drawing.Size(170, 20);
+            this.expirationDateTimePicker.TabIndex = 8;
+            this.expirationDateTimePicker.Value = new System.DateTime(2020, 1, 1, 0, 0, 0, 0);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.expiresEndOfRadioButton);
+            this.groupBox1.Controls.Add(this.expiresNeverRadioButton);
+            this.groupBox1.Controls.Add(this.expirationDateTimePicker);
+            this.groupBox1.Location = new System.Drawing.Point(12, 165);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(247, 66);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Account expires";
+            // 
+            // expiresNeverRadioButton
+            // 
+            this.expiresNeverRadioButton.AutoSize = true;
+            this.expiresNeverRadioButton.Checked = true;
+            this.expiresNeverRadioButton.Location = new System.Drawing.Point(6, 19);
+            this.expiresNeverRadioButton.Name = "expiresNeverRadioButton";
+            this.expiresNeverRadioButton.Size = new System.Drawing.Size(54, 17);
+            this.expiresNeverRadioButton.TabIndex = 9;
+            this.expiresNeverRadioButton.TabStop = true;
+            this.expiresNeverRadioButton.Text = "Never";
+            this.expiresNeverRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // expiresEndOfRadioButton
+            // 
+            this.expiresEndOfRadioButton.AutoSize = true;
+            this.expiresEndOfRadioButton.Location = new System.Drawing.Point(6, 42);
+            this.expiresEndOfRadioButton.Name = "expiresEndOfRadioButton";
+            this.expiresEndOfRadioButton.Size = new System.Drawing.Size(59, 17);
+            this.expiresEndOfRadioButton.TabIndex = 10;
+            this.expiresEndOfRadioButton.TabStop = true;
+            this.expiresEndOfRadioButton.Text = "End of:";
+            this.expiresEndOfRadioButton.UseVisualStyleBackColor = true;
+            // 
             // UserEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(271, 390);
+            this.ClientSize = new System.Drawing.Size(271, 460);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.enabledCheckBox);
@@ -204,6 +255,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "UserEditForm";
             this.Text = "Edit user";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -226,5 +279,9 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.DateTimePicker expirationDateTimePicker;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton expiresEndOfRadioButton;
+        private System.Windows.Forms.RadioButton expiresNeverRadioButton;
     }
 }

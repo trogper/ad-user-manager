@@ -12,7 +12,7 @@ namespace AdUserManager.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -116,6 +116,42 @@ namespace AdUserManager.Properties {
             }
             set {
                 this["logging_enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool expiration_enabled {
+            get {
+                return ((bool)(this["expiration_enabled"]));
+            }
+            set {
+                this["expiration_enabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2020-01-01")]
+        public global::System.DateTime expiration_date {
+            get {
+                return ((global::System.DateTime)(this["expiration_date"]));
+            }
+            set {
+                this["expiration_date"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("year")]
+        public string expiration_extend_period {
+            get {
+                return ((string)(this["expiration_extend_period"]));
+            }
+            set {
+                this["expiration_extend_period"] = value;
             }
         }
     }
