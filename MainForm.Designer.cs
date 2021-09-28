@@ -31,6 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.userGridView = new System.Windows.Forms.DataGridView();
+            this.LogonName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Username = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Groups = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.LockedOut = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Expires = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.newUserToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,16 +46,10 @@
             this.editUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableDisableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unlockAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extendExpirationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newPasswordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteUserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newUserButton = new System.Windows.Forms.Button();
-            this.LogonName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Username = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Groups = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.LockedOut = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Expires = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.extendExpirationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.userGridView)).BeginInit();
             this.dgContextMenuStrip.SuspendLayout();
             this.rowContextMenuStrip.SuspendLayout();
@@ -80,101 +80,7 @@
             this.userGridView.ShowEditingIcon = false;
             this.userGridView.Size = new System.Drawing.Size(846, 450);
             this.userGridView.TabIndex = 0;
-            // 
-            // dgContextMenuStrip
-            // 
-            this.dgContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newUserToolStripMenuItem1,
-            this.refreshToolStripMenuItem});
-            this.dgContextMenuStrip.Name = "dgContextMenuStrip";
-            this.dgContextMenuStrip.Size = new System.Drawing.Size(134, 48);
-            // 
-            // newUserToolStripMenuItem1
-            // 
-            this.newUserToolStripMenuItem1.Name = "newUserToolStripMenuItem1";
-            this.newUserToolStripMenuItem1.Size = new System.Drawing.Size(133, 22);
-            this.newUserToolStripMenuItem1.Text = "New User...";
-            this.newUserToolStripMenuItem1.Click += new System.EventHandler(this.newUser_Click);
-            // 
-            // refreshToolStripMenuItem
-            // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
-            this.refreshToolStripMenuItem.Text = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
-            // 
-            // rowContextMenuStrip
-            // 
-            this.rowContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newUserToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.editUserToolStripMenuItem,
-            this.enableDisableToolStripMenuItem,
-            this.unlockAccountToolStripMenuItem,
-            this.extendExpirationToolStripMenuItem,
-            this.newPasswordToolStripMenuItem,
-            this.deleteUserToolStripMenuItem});
-            this.rowContextMenuStrip.Name = "contextMenuStrip";
-            this.rowContextMenuStrip.Size = new System.Drawing.Size(181, 186);
-            this.rowContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
-            // 
-            // newUserToolStripMenuItem
-            // 
-            this.newUserToolStripMenuItem.Name = "newUserToolStripMenuItem";
-            this.newUserToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.newUserToolStripMenuItem.Text = "New User...";
-            this.newUserToolStripMenuItem.Click += new System.EventHandler(this.newUser_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
-            // 
-            // editUserToolStripMenuItem
-            // 
-            this.editUserToolStripMenuItem.Name = "editUserToolStripMenuItem";
-            this.editUserToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.editUserToolStripMenuItem.Text = "Edit User";
-            this.editUserToolStripMenuItem.Click += new System.EventHandler(this.editUserToolStripMenuItem_Click);
-            // 
-            // enableDisableToolStripMenuItem
-            // 
-            this.enableDisableToolStripMenuItem.Name = "enableDisableToolStripMenuItem";
-            this.enableDisableToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.enableDisableToolStripMenuItem.Text = "Enable/Disable";
-            this.enableDisableToolStripMenuItem.Click += new System.EventHandler(this.enableDisableToolStripMenuItem_Click);
-            // 
-            // unlockAccountToolStripMenuItem
-            // 
-            this.unlockAccountToolStripMenuItem.Name = "unlockAccountToolStripMenuItem";
-            this.unlockAccountToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.unlockAccountToolStripMenuItem.Text = "Unlock Account";
-            this.unlockAccountToolStripMenuItem.Click += new System.EventHandler(this.unlockAccountToolStripMenuItem_Click);
-            // 
-            // newPasswordToolStripMenuItem
-            // 
-            this.newPasswordToolStripMenuItem.Name = "newPasswordToolStripMenuItem";
-            this.newPasswordToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.newPasswordToolStripMenuItem.Text = "New Password...";
-            this.newPasswordToolStripMenuItem.Click += new System.EventHandler(this.newPasswordToolStripMenuItem_Click);
-            // 
-            // deleteUserToolStripMenuItem
-            // 
-            this.deleteUserToolStripMenuItem.Name = "deleteUserToolStripMenuItem";
-            this.deleteUserToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.deleteUserToolStripMenuItem.Text = "Delete";
-            this.deleteUserToolStripMenuItem.Click += new System.EventHandler(this.deleteUserToolStripMenuItem_Click);
-            // 
-            // newUserButton
-            // 
-            this.newUserButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.newUserButton.Location = new System.Drawing.Point(759, 415);
-            this.newUserButton.Name = "newUserButton";
-            this.newUserButton.Size = new System.Drawing.Size(75, 23);
-            this.newUserButton.TabIndex = 1;
-            this.newUserButton.Text = "New user";
-            this.newUserButton.UseVisualStyleBackColor = true;
-            this.newUserButton.Click += new System.EventHandler(this.newUser_Click);
+            this.userGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.userGridView_CellMouseDown);
             // 
             // LogonName
             // 
@@ -222,12 +128,107 @@
             this.Expires.Name = "Expires";
             this.Expires.ReadOnly = true;
             // 
+            // dgContextMenuStrip
+            // 
+            this.dgContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newUserToolStripMenuItem1,
+            this.refreshToolStripMenuItem});
+            this.dgContextMenuStrip.Name = "dgContextMenuStrip";
+            this.dgContextMenuStrip.Size = new System.Drawing.Size(134, 48);
+            // 
+            // newUserToolStripMenuItem1
+            // 
+            this.newUserToolStripMenuItem1.Name = "newUserToolStripMenuItem1";
+            this.newUserToolStripMenuItem1.Size = new System.Drawing.Size(133, 22);
+            this.newUserToolStripMenuItem1.Text = "New User...";
+            this.newUserToolStripMenuItem1.Click += new System.EventHandler(this.newUser_Click);
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
+            // rowContextMenuStrip
+            // 
+            this.rowContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newUserToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.editUserToolStripMenuItem,
+            this.enableDisableToolStripMenuItem,
+            this.unlockAccountToolStripMenuItem,
+            this.extendExpirationToolStripMenuItem,
+            this.newPasswordToolStripMenuItem,
+            this.deleteUserToolStripMenuItem});
+            this.rowContextMenuStrip.Name = "contextMenuStrip";
+            this.rowContextMenuStrip.Size = new System.Drawing.Size(167, 164);
+            this.rowContextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.rowContextMenuStrip_Opening);
+            // 
+            // newUserToolStripMenuItem
+            // 
+            this.newUserToolStripMenuItem.Name = "newUserToolStripMenuItem";
+            this.newUserToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.newUserToolStripMenuItem.Text = "New User...";
+            this.newUserToolStripMenuItem.Click += new System.EventHandler(this.newUser_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(163, 6);
+            // 
+            // editUserToolStripMenuItem
+            // 
+            this.editUserToolStripMenuItem.Name = "editUserToolStripMenuItem";
+            this.editUserToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.editUserToolStripMenuItem.Text = "Edit User";
+            this.editUserToolStripMenuItem.Click += new System.EventHandler(this.editUserToolStripMenuItem_Click);
+            // 
+            // enableDisableToolStripMenuItem
+            // 
+            this.enableDisableToolStripMenuItem.Name = "enableDisableToolStripMenuItem";
+            this.enableDisableToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.enableDisableToolStripMenuItem.Text = "Enable/Disable";
+            this.enableDisableToolStripMenuItem.Click += new System.EventHandler(this.enableDisableToolStripMenuItem_Click);
+            // 
+            // unlockAccountToolStripMenuItem
+            // 
+            this.unlockAccountToolStripMenuItem.Name = "unlockAccountToolStripMenuItem";
+            this.unlockAccountToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.unlockAccountToolStripMenuItem.Text = "Unlock Account";
+            this.unlockAccountToolStripMenuItem.Click += new System.EventHandler(this.unlockAccountToolStripMenuItem_Click);
+            // 
             // extendExpirationToolStripMenuItem
             // 
             this.extendExpirationToolStripMenuItem.Name = "extendExpirationToolStripMenuItem";
-            this.extendExpirationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.extendExpirationToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.extendExpirationToolStripMenuItem.Text = "Extend expiration";
             this.extendExpirationToolStripMenuItem.Click += new System.EventHandler(this.extendExpirationToolStripMenuItem_Click);
+            // 
+            // newPasswordToolStripMenuItem
+            // 
+            this.newPasswordToolStripMenuItem.Name = "newPasswordToolStripMenuItem";
+            this.newPasswordToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.newPasswordToolStripMenuItem.Text = "New Password...";
+            this.newPasswordToolStripMenuItem.Click += new System.EventHandler(this.newPasswordToolStripMenuItem_Click);
+            // 
+            // deleteUserToolStripMenuItem
+            // 
+            this.deleteUserToolStripMenuItem.Name = "deleteUserToolStripMenuItem";
+            this.deleteUserToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.deleteUserToolStripMenuItem.Text = "Delete";
+            this.deleteUserToolStripMenuItem.Click += new System.EventHandler(this.deleteUserToolStripMenuItem_Click);
+            // 
+            // newUserButton
+            // 
+            this.newUserButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.newUserButton.Location = new System.Drawing.Point(759, 415);
+            this.newUserButton.Name = "newUserButton";
+            this.newUserButton.Size = new System.Drawing.Size(75, 23);
+            this.newUserButton.TabIndex = 1;
+            this.newUserButton.Text = "New user";
+            this.newUserButton.UseVisualStyleBackColor = true;
+            this.newUserButton.Click += new System.EventHandler(this.newUser_Click);
             // 
             // MainForm
             // 

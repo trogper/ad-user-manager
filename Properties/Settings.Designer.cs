@@ -26,12 +26,12 @@ namespace AdUserManager.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string dc_name {
+        public string dc_address {
             get {
-                return ((string)(this["dc_name"]));
+                return ((string)(this["dc_address"]));
             }
             set {
-                this["dc_name"] = value;
+                this["dc_address"] = value;
             }
         }
         

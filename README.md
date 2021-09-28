@@ -18,7 +18,7 @@ Supports following operations:
 3. Delegate "manage membership" on Groups OU to a desired manager user.
 
 app configuration xml:
-- dc_name: IP address or hostname of domain controller. If left empty, it will be discovered automatically.
+- dc_address: IP address or hostname of domain controller. If left empty, it will be discovered automatically.
 - username: Authentication username. If left empty, current logged in user will be used
 - password: Authentication password. Only used if username is provided.
 - users_dn: DN of Users OU to be managed

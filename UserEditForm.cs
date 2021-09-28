@@ -56,9 +56,11 @@ namespace AdUserManager
             expiresRadio.Checked = true;
 
             DateTime expirationDate;
-            bool isNewAndExpires = isNewUser && Properties.Settings.Default.expiration_enabled;
 
-            if (expires || isNewAndExpires)
+            if (isNewUser && Properties.Settings.Default.expiration_enabled)
+                expiresEndOfRadioButton.Checked = true;
+
+            if (expires)
                 expirationDate = user.AccountExpirationDate.Value.AddDays(-1);
             else
                 expirationDate = Utils.getNextExpirationDate();

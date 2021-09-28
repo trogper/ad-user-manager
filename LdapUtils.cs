@@ -12,18 +12,19 @@ namespace AdUserManager
     {
 
         static public string DomainName;
-        static public string currentUser;
         static public bool WritePermitted;
 
         static string ManagersGroupDN;
 
+
+        static UserPrincipal currentUser;
         static PrincipalContext usersContext, groupsContext;
 
         static public void init()
         {
             string ManagedGroupsDN = Properties.Settings.Default.groups_dn;
             string ManagedUsersDN = Properties.Settings.Default.users_dn;
-            string dcName = Properties.Settings.Default.dc_name;
+            string dcAddress = Properties.Settings.Default.dc_address;
             string username = Properties.Settings.Default.username;
             string password = Properties.Settings.Default.password;
 
@@ -33,34 +34,40 @@ namespace AdUserManager
             if (string.IsNullOrEmpty(DomainName))
                 DomainName = ExtractDomainName(ManagedUsersDN);
 
-            if (string.IsNullOrEmpty(dcName))
+            if (string.IsNullOrEmpty(dcAddress))
             {
                 var ctx = new DirectoryContext(DirectoryContextType.Domain);
                 var dc = DomainController.FindOne(ctx);
-                dcName = dc.Name;
+                dcAddress = dc.Name;
             }
 
             if (string.IsNullOrEmpty(username))
             {
-                usersContext = new PrincipalContext(ContextType.Domain, dcName, ManagedUsersDN);
-                groupsContext = new PrincipalContext(ContextType.Domain, dcName, ManagedGroupsDN);
+                usersContext = new PrincipalContext(ContextType.Domain, dcAddress, ManagedUsersDN);
+                groupsContext = new PrincipalContext(ContextType.Domain, dcAddress, ManagedGroupsDN);
+                currentUser = UserPrincipal.Current;
             }
             else
             {
-                usersContext = new PrincipalContext(ContextType.Domain, dcName, ManagedUsersDN, username, password);
-                groupsContext = new PrincipalContext(ContextType.Domain, dcName, ManagedGroupsDN, username, password);
+                usersContext = new PrincipalContext(ContextType.Domain, dcAddress, ManagedUsersDN, username, password);
+                groupsContext = new PrincipalContext(ContextType.Domain, dcAddress, ManagedGroupsDN, username, password);
+
+                var dcComponent = string.Join(",", DomainName.Split('.').Select(c => "DC=" + c));
+                var globalContext = new PrincipalContext(ContextType.Domain, dcAddress, dcComponent, username, password);
+                
+                currentUser = UserPrincipal.FindByIdentity(globalContext, username);
             }
 
             // validate credentials
             try
             {
                 new PrincipalSearcher(new UserPrincipal(usersContext) { Name = "*" }).FindOne();
+
             }
             // catch Principal not found
             catch (PrincipalOperationException poex) { }
 
             WritePermitted = IsReadWrite();
-            currentUser = UserPrincipal.Current.SamAccountName;
         }
 
         public static string ExtractDomainName(string DN)
@@ -82,7 +89,6 @@ namespace AdUserManager
             if (string.IsNullOrWhiteSpace(ManagersGroupDN))
                 return true;
 
-            var currentUser = UserPrincipal.Current;
             var isManager = currentUser
                 .GetGroups()
                 .Select(g => g.DistinguishedName)

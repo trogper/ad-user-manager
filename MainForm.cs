@@ -206,7 +206,18 @@ namespace AdUserManager
             return managedUsers[index];
         }
 
-        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void userGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                userGridView.ClearSelection();
+                int rowSelected = e.RowIndex;
+                if (e.RowIndex != -1)
+                    userGridView.Rows[rowSelected].Selected = true;
+            }
+        }
+
+        private void rowContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var user = GetSelectedUser();
             var enabled = user.Enabled == true;
