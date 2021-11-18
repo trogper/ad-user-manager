@@ -32,6 +32,9 @@ app configuration xml:
 - expiration_date: default/base expiration date. Multiple years or months are added to the date for it to be in the future. This date must be in the past.
 - expiration_extend_period: period added to expiration date when being extended
  - example: `year`, `month`
+- generated_password_length: length of generated password
+- generated_password_include_special: whether to include special characters (+-*/.!?$_ ) in generated password
+
 
 # Attribution
 Icon made by [Freepik](https://www.freepik.com)
