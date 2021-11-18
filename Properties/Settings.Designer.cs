@@ -154,5 +154,29 @@ namespace AdUserManager.Properties {
                 this["expiration_extend_period"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public int generated_password_length {
+            get {
+                return ((int)(this["generated_password_length"]));
+            }
+            set {
+                this["generated_password_length"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool generated_password_include_special {
+            get {
+                return ((bool)(this["generated_password_include_special"]));
+            }
+            set {
+                this["generated_password_include_special"] = value;
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.DirectoryServices.AccountManagement;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace AdUserManager
@@ -16,6 +17,9 @@ namespace AdUserManager
         public void LoadUser(UserPrincipal user)
         {
             this.user = user;
+            password1TextBox.UseSystemPasswordChar = true;
+            password1TextBox.Text = "";
+            password2TextBox.Text = "";
         }
 
         private void saveButton_Click(object sender, EventArgs e)
@@ -38,6 +42,32 @@ namespace AdUserManager
             }
 
             SavePassword(password1);
+        }
+
+        private void generatePasswordButton_Click(object sender, EventArgs e)
+        {
+            int length = Properties.Settings.Default.generated_password_length;
+            bool includeSpecial = Properties.Settings.Default.generated_password_include_special;
+
+            string chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+            if (includeSpecial)
+                chars += "+-*/.!?$_ ";
+
+            var rng = RandomNumberGenerator.Create();
+            byte[] rnd = new byte[length];
+            rng.GetBytes(rnd);
+
+            string password = "";
+
+            for (int i = 0; i < length; i++)
+            {
+                int m = rnd[i] % chars.Length;
+                password += chars[m];
+            }
+
+            password1TextBox.UseSystemPasswordChar = false;
+            password1TextBox.Text = password;
+            password2TextBox.Text = password;
         }
 
         private void SavePassword(string password)

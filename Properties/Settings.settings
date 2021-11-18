@@ -35,5 +35,11 @@
     <Setting Name="expiration_extend_period" Type="System.String" Scope="User">
       <Value Profile="(Default)">year</Value>
     </Setting>
+    <Setting Name="generated_password_length" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">16</Value>
+    </Setting>
+    <Setting Name="generated_password_include_special" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

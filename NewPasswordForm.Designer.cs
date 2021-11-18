@@ -34,6 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.generatePasswordButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // saveButton
@@ -52,6 +53,7 @@
             this.password1TextBox.Name = "password1TextBox";
             this.password1TextBox.Size = new System.Drawing.Size(156, 20);
             this.password1TextBox.TabIndex = 1;
+            this.password1TextBox.UseSystemPasswordChar = true;
             // 
             // password2TextBox
             // 
@@ -59,6 +61,7 @@
             this.password2TextBox.Name = "password2TextBox";
             this.password2TextBox.Size = new System.Drawing.Size(156, 20);
             this.password2TextBox.TabIndex = 2;
+            this.password2TextBox.UseSystemPasswordChar = true;
             // 
             // label1
             // 
@@ -89,6 +92,16 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // generatePasswordButton
+            // 
+            this.generatePasswordButton.Location = new System.Drawing.Point(15, 64);
+            this.generatePasswordButton.Name = "generatePasswordButton";
+            this.generatePasswordButton.Size = new System.Drawing.Size(75, 23);
+            this.generatePasswordButton.TabIndex = 0;
+            this.generatePasswordButton.Text = "Generate";
+            this.generatePasswordButton.UseVisualStyleBackColor = true;
+            this.generatePasswordButton.Click += new System.EventHandler(this.generatePasswordButton_Click);
+            // 
             // NewPasswordForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -100,10 +113,12 @@
             this.Controls.Add(this.password2TextBox);
             this.Controls.Add(this.password1TextBox);
             this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.generatePasswordButton);
             this.Controls.Add(this.saveButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "NewPasswordForm";
             this.Text = "New password";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewPasswordForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,5 +132,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button generatePasswordButton;
     }
 }
