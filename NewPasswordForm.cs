@@ -76,6 +76,7 @@ namespace AdUserManager
             {
                 user.SetPassword(password);
                 user.UnlockAccount();
+                user.PasswordNotRequired = false;
                 user.Save();
 
                 MessageBox.Show(this, "Password has been set", "Password saved", MessageBoxButtons.OK, MessageBoxIcon.Information);

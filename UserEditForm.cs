@@ -177,6 +177,7 @@ namespace AdUserManager
                 // Do not change logon name for existing users
                 user.SamAccountName = Unaccent(logonNameTextBox.Text);
                 user.UserPrincipalName = user.SamAccountName + "@" + LdapUtils.DomainName;
+                user.Name = user.DisplayName;
             }
             else
             {
