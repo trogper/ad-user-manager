@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.DirectoryServices.ActiveDirectory;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
-using System.Security.Authentication;
 using System.Text.RegularExpressions;
 
 namespace AdUserManager

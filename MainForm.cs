@@ -95,7 +95,11 @@ namespace AdUserManager
 
             }
 
-            userGridView.Rows[selIndex].Selected = true;
+            if (selIndex >= userGridView.Rows.Count)
+                selIndex = userGridView.Rows.Count - 1;
+
+            if (selIndex >= 0)
+                userGridView.Rows[selIndex].Selected = true;
         }
 
 
@@ -238,10 +242,9 @@ namespace AdUserManager
             if (res.HasFlag(DialogResult.OK))
             {
                 newPasswordForm.LoadUser(user);
-                res = newPasswordForm.ShowDialog();
+                newPasswordForm.ShowDialog();
 
-                if (res.HasFlag(DialogResult.OK))
-                    LoadUsers();
+                LoadUsers();
             }
 
         }

@@ -81,6 +81,9 @@ namespace AdUserManager
 
                 MessageBox.Show(this, "Password has been set", "Password saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                DialogResult = DialogResult.OK;
+                Close();
+
             } catch (PasswordException ex)
             {
                 MessageBox.Show(this, "Password does not meet security policy", "Weak password", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -89,7 +92,13 @@ namespace AdUserManager
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void NewPasswordForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
         }
     }
 }
