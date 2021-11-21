@@ -95,7 +95,10 @@ namespace AdUserManager
                     userGridView.Rows[i].Selected = true;
 
             }
-            
+
+            var sortColumn = userGridView.SortedColumn == null ? userGridView.Columns[0] : userGridView.SortedColumn;
+            var sortOrder = userGridView.SortOrder == SortOrder.Descending ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending;
+            userGridView.Sort(sortColumn, sortOrder);
         }
 
 
