@@ -94,7 +94,7 @@
             // 
             // generatePasswordButton
             // 
-            this.generatePasswordButton.Location = new System.Drawing.Point(15, 64);
+            this.generatePasswordButton.Location = new System.Drawing.Point(12, 64);
             this.generatePasswordButton.Name = "generatePasswordButton";
             this.generatePasswordButton.Size = new System.Drawing.Size(75, 23);
             this.generatePasswordButton.TabIndex = 0;
