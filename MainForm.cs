@@ -53,9 +53,7 @@ namespace AdUserManager
 
         private void LoadUsers()
         {
-            var selIndex = userGridView.SelectedCells.Count > 0
-                ? userGridView.SelectedCells[0].RowIndex
-                : 0;
+            var selUser = GetSelectedUser();
 
             userGridView.Rows.Clear();
 
@@ -93,13 +91,11 @@ namespace AdUserManager
                 if (LdapUtils.WritePermitted)
                     userGridView.Rows[i].ContextMenuStrip = rowContextMenuStrip;
 
+                if (selUser != null && selUser.SamAccountName == user.SamAccountName)
+                    userGridView.Rows[i].Selected = true;
+
             }
-
-            if (selIndex >= userGridView.Rows.Count)
-                selIndex = userGridView.Rows.Count - 1;
-
-            if (selIndex >= 0)
-                userGridView.Rows[selIndex].Selected = true;
+            
         }
 
 
@@ -206,8 +202,12 @@ namespace AdUserManager
 
         private UserPrincipal GetSelectedUser()
         {
-            var index = userGridView.SelectedCells[0].RowIndex;
-            return managedUsers[index];
+            if (userGridView.SelectedRows.Count == 0)
+                return null;
+
+            string samAccountName = userGridView.SelectedRows[0].Cells[0].Value.ToString();
+            var user = managedUsers.Where(u => u.SamAccountName == samAccountName).First();
+            return user;
         }
 
         private void userGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
