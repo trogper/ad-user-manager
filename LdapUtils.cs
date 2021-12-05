@@ -75,7 +75,7 @@ namespace AdUserManager
 
             Regex regex = new Regex("(?<=,DC\\=)[^,.]*(?=,)");
 
-            foreach (Match match in regex.Matches($",${DN},"))
+            foreach (Match match in regex.Matches($",{DN},"))
             {
                 dcs.Add(match.Value);
             }
@@ -128,6 +128,15 @@ namespace AdUserManager
             insUserPrincipal.Name = "*";
             return SearchUsers(insUserPrincipal);
         }
+
+        static public UserPrincipal GetManagedUser(string samAccountName)
+        {
+            UserPrincipal insUserPrincipal = new UserPrincipal(usersContext);
+            insUserPrincipal.SamAccountName = samAccountName;
+            var users = SearchUsers(insUserPrincipal);
+            return users.FirstOrDefault(u => true);
+        }
+
         static public IEnumerable<GroupPrincipal> ListManagedGroups()
         {
             return ListGroups(groupsContext);

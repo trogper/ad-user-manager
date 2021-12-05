@@ -74,9 +74,15 @@ namespace AdUserManager
         {
             try
             {
+                bool? enabled = user.Enabled;
+
                 user.SetPassword(password);
                 user.UnlockAccount();
                 user.PasswordNotRequired = false;
+                user.Save();
+
+                // fix for disabled new user accounts
+                user.Enabled = enabled;
                 user.Save();
 
                 MessageBox.Show(this, "Password has been set", "Password saved", MessageBoxButtons.OK, MessageBoxIcon.Information);

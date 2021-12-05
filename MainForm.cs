@@ -18,7 +18,7 @@ namespace AdUserManager
 
         List<GroupPrincipal> managedGroups;
         List<UserPrincipal> managedUsers;
-        List<List<GroupPrincipal>> managedUsersGroups;
+        Dictionary<UserPrincipal, List<GroupPrincipal>> managedUsersGroups;
 
         UserEditForm userEditForm = new UserEditForm();
         NewPasswordForm newPasswordForm = new NewPasswordForm();
@@ -51,57 +51,87 @@ namespace AdUserManager
             userEditForm.LoadManagedGroups(managedGroups);
         }
 
-        private void LoadUsers()
+        private DataGridViewRow DisplayUser(UserPrincipal user, DataGridViewRow row = null)
         {
-            var selUser = GetSelectedUser();
+            var groups = user.GetGroups()
+                    .OfType<GroupPrincipal>()
+                    .Where(IsManaged);
+
+            managedUsersGroups.Add(user, groups.ToList());
+
+            bool expires = user.AccountExpirationDate.HasValue;
+            DateTime? expiration = user.AccountExpirationDate?.Date.AddDays(-1);
+            bool expired = expires && expiration.Value.CompareTo(DateTime.Now) < 0;
+
+            string expiresStr = expires
+                ? expiration.Value.ToShortDateString()
+                : "never";
+
+            var values = new object[]
+            {
+                user.SamAccountName,
+                user.DisplayName,
+                string.Join(", ", groups.Select(p => p.Name)),
+                user.Enabled,
+                user.IsAccountLockedOut(),
+                expiresStr
+            };
+            
+            if (row == null)
+            {
+                int i = userGridView.Rows.Add();
+                row = userGridView.Rows[i];
+            }
+
+            row.SetValues(values);
+            row.Tag = user;
+            
+            if (expired)
+                row.Cells[5].Style.BackColor = System.Drawing.Color.LightSalmon;
+
+            if (LdapUtils.WritePermitted)
+                row.ContextMenuStrip = rowContextMenuStrip;
+
+            return row;
+        }
+
+        private void LoadUsers(bool retainSelection = true)
+        {
+            var selUser = retainSelection ? GetSelectedUser() : null;
 
             userGridView.Rows.Clear();
 
             managedUsers = LdapUtils.ListManagedUsers().ToList();
-            managedUsersGroups = new List<List<GroupPrincipal>>();
+            managedUsersGroups = new Dictionary<UserPrincipal, List<GroupPrincipal>>();
 
             foreach (var user in managedUsers)
             {
-                var groups = user.GetGroups()
-                    .OfType<GroupPrincipal>()
-                    .Where(IsManaged);
-
-                managedUsersGroups.Add(groups.ToList());
-
-                bool expires = user.AccountExpirationDate.HasValue;
-                DateTime? expiration = user.AccountExpirationDate?.Date.AddDays(-1);
-                bool expired = expires && expiration.Value.CompareTo(DateTime.Now) < 0;
-
-                string expiresStr = expires
-                    ? expiration.Value.ToShortDateString()
-                    : "never";
-
-                var i = userGridView.Rows.Add(new object[] {
-                    user.SamAccountName,
-                    user.DisplayName,
-                    string.Join(",", groups.Select(p => p.Name)),
-                    user.Enabled,
-                    user.IsAccountLockedOut(),
-                    expiresStr
-                });
-
-                if (expired)
-                    userGridView.Rows[i].Cells[5].Style.BackColor = System.Drawing.Color.LightSalmon;
-
-                if (LdapUtils.WritePermitted)
-                    userGridView.Rows[i].ContextMenuStrip = rowContextMenuStrip;
+                var row = DisplayUser(user);
 
                 if (selUser != null && selUser.SamAccountName == user.SamAccountName)
-                    userGridView.Rows[i].Selected = true;
-
+                    row.Selected = true;
             }
 
+            SortUserGridView();
+
+        }
+
+        private void ReloadUser(UserPrincipal user)
+        {
+            var row = GetUserRow(user);
+            
+            user = LdapUtils.GetManagedUser(user.SamAccountName);
+
+            DisplayUser(user, row);
+            SortUserGridView();
+        }
+
+        private void SortUserGridView()
+        {
             var sortColumn = userGridView.SortedColumn == null ? userGridView.Columns[0] : userGridView.SortedColumn;
             var sortOrder = userGridView.SortOrder == SortOrder.Descending ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending;
             userGridView.Sort(sortColumn, sortOrder);
         }
-
-
 
         private bool IsManaged(GroupPrincipal group)
         {
@@ -111,15 +141,16 @@ namespace AdUserManager
         private void EditUser(UserPrincipal user)
         {
             var index = managedUsers.IndexOf(user);
-            var groups = managedUsersGroups[index];
+            List<GroupPrincipal> groups;
+            managedUsersGroups.TryGetValue(user, out groups);
 
             userEditForm.LoadUser(user, groups);
             var res = userEditForm.ShowDialog();
 
             if (res.HasFlag(DialogResult.OK))
             {
-                LoadUsers();
-                Logging.logInfo($"Account ${user.SamAccountName} edited");
+                ReloadUser(user);
+                Logging.logInfo($"Account {user.SamAccountName} edited");
             }
         }
 
@@ -129,15 +160,16 @@ namespace AdUserManager
             {
                 user.Enabled = !user.Enabled;
                 user.Save();
-                LoadUsers();
+
+                ReloadUser(user);
 
                 var endis = user.Enabled == true ? "en" : "dis";
-                Logging.logInfo($"Account ${user.SamAccountName} ${endis}abled");
+                Logging.logInfo($"Account {user.SamAccountName} {endis}abled");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Account could not be enabled or disabled\n" + ex.Message, "Enable/disable failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logging.logError($"Account ${user.SamAccountName} could not be enabled or disabled\n${ex.Message}");
+                Logging.logError($"Account {user.SamAccountName} could not be enabled or disabled\n{ex.Message}");
             }
         }
 
@@ -147,14 +179,15 @@ namespace AdUserManager
             {
                 user.UnlockAccount();
                 user.Save();
-                LoadUsers();
 
-                Logging.logInfo($"Account ${user.SamAccountName} unlocked");
+                ReloadUser(user);
+
+                Logging.logInfo($"Account {user.SamAccountName} unlocked");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Account could not be unlocked\n" + ex.Message, "Unlock failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logging.logError($"Account ${user.SamAccountName} could not be unlocked\n${ex.Message}");
+                Logging.logError($"Account {user.SamAccountName} could not be unlocked\n{ex.Message}");
             }
         }
 
@@ -164,14 +197,15 @@ namespace AdUserManager
             {
                 user.AccountExpirationDate = Utils.getNextExpirationDate(user.AccountExpirationDate.Value);
                 user.Save();
-                LoadUsers();
 
-                Logging.logInfo($"Account ${user.SamAccountName} expiration extended");
+                ReloadUser(user);
+
+                Logging.logInfo($"Account {user.SamAccountName} expiration extended");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Account expiration could not be extended\n" + ex.Message, "Expiration extension failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logging.logError($"Account ${user.SamAccountName} expiration could not be extended\n${ex.Message}");
+                Logging.logError($"Account {user.SamAccountName} expiration could not be extended\n{ex.Message}");
             }
         }
 
@@ -182,24 +216,31 @@ namespace AdUserManager
 
             if (res.HasFlag(DialogResult.OK))
             {
-                LoadUsers();
-                Logging.logInfo($"New password set for ${user.SamAccountName}");
+                ReloadUser(user);
+                Logging.logInfo($"New password set for {user.SamAccountName}");
             }
         }
 
         private void DeleteUser(UserPrincipal user)
         {
+            string samAccountName = user.SamAccountName;
+
             try
             {
-                user.Delete();
-                LoadUsers();
+                var result = MessageBox.Show(this, $"Do you really want to delete user {samAccountName}?", "Delete user", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                if (result != DialogResult.OK)
+                    return;
 
-                Logging.logInfo($"Account ${user.SamAccountName} deleted");
+                user.Delete();
+
+                userGridView.Rows.Remove(GetUserRow(user));
+
+                Logging.logInfo($"Account {samAccountName} deleted");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(this, "User could not be deleted\n" + ex.Message, "Delete failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logging.logError($"Account ${user.SamAccountName} could not be deleted\n${ex.Message}");
+                Logging.logError($"Account {samAccountName} could not be deleted\n{ex.Message}");
             }
         }
 
@@ -208,9 +249,15 @@ namespace AdUserManager
             if (userGridView.SelectedRows.Count == 0)
                 return null;
 
-            string samAccountName = userGridView.SelectedRows[0].Cells[0].Value.ToString();
-            var user = managedUsers.Where(u => u.SamAccountName == samAccountName).First();
+            var user = (UserPrincipal)userGridView.SelectedRows[0].Tag;
             return user;
+        }
+
+        private DataGridViewRow GetUserRow(UserPrincipal user)
+        {
+            return userGridView.Rows
+                .Cast<DataGridViewRow>()
+                .FirstOrDefault(r => r.Tag == user);
         }
 
         private void userGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
@@ -286,6 +333,14 @@ namespace AdUserManager
         private void deleteUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DeleteUser(GetSelectedUser());
+        }
+
+        private void userGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var user = GetSelectedUser();
+
+            if (user != null)
+                EditUser(user);
         }
     }
 }

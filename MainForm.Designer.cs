@@ -80,6 +80,7 @@
             this.userGridView.ShowEditingIcon = false;
             this.userGridView.Size = new System.Drawing.Size(846, 450);
             this.userGridView.TabIndex = 0;
+            this.userGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.userGridView_CellDoubleClick);
             this.userGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.userGridView_CellMouseDown);
             // 
             // LogonName

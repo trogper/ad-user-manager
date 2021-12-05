@@ -215,9 +215,10 @@ namespace AdUserManager
                 // TODO validate userPrincipalName collision
 
                 var userTuple = ModifyUser();
-                userTuple.Item1.Save();
-
+                var user = userTuple.Item1;
                 var userGroups = userTuple.Item2;
+
+                user.Save();
 
                 foreach (var group in managedGroups)
                 {
@@ -236,7 +237,7 @@ namespace AdUserManager
             catch (Exception ex)
             {
                 MessageBox.Show(this, "Error saving user\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Logging.logWarning($"Error saving user\n${ex.Message}");
+                Logging.logWarning($"Error saving user\n{ex.Message}");
                 return;
             }
             
